@@ -16,14 +16,9 @@ namespace Sengoku.API.Models.Responses
         public string SuccessMessage { get; set; }
         public string ErrorMessage { get; set; }
 
-        public UserResponse(User user)
+        public UserResponse(bool success, string message, User user = null)
         {
-            Success = true;
             User = user;
-        }
-
-        public UserResponse(bool success, string message)
-        {
             Success = success;
             if (success) SuccessMessage = message;
             else ErrorMessage = message;

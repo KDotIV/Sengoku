@@ -19,6 +19,7 @@ namespace Sengoku.API.Repositories
             });
             servicesBuilder.AddSingleton<EventsRepository>();
             servicesBuilder.AddSingleton<UserRepository>();
+            servicesBuilder.AddSingleton<ProductsRepository>();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using MongoDB.Bson.Serialization.Conventions;
+﻿using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Sengoku.API.Models;
@@ -10,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Bson;
+using MongoDB.Driver.Linq;
 
 namespace Sengoku.API.Repositories
 {
@@ -20,6 +19,7 @@ namespace Sengoku.API.Repositories
 
         private const int DefaultUsersPerPage = 20;
         private const int DefaultSortOrder = -1;
+        private readonly ProjectionDefinition<User> staticExclution = Builders<User>.Projection.Exclude("password").Exclude("_id");
 
         public UserRepository(IMongoDBContext context)
         {
@@ -29,23 +29,23 @@ namespace Sengoku.API.Repositories
             _userCollections = _ctx.GetCollection<User>("Users");
         }
 
-        public async Task<IReadOnlyList<User>> GetUsers(int usersPerPage = DefaultUsersPerPage, int page = 0,
+        public async Task<List<User>> GetUsers(int usersPerPage = DefaultUsersPerPage, int page = 0,
             int sort = DefaultSortOrder)
         {
             var skip = usersPerPage * page;
             var limit = usersPerPage;
 
             var users = await _userCollections
-                .Find(Builders<User>.Filter.Empty)
-                .Limit(limit)
-                .Skip(skip)
+                .Find(user => true)
+                .Project<User>(staticExclution)
                 .ToListAsync();
 
             return users;
         }
         public async Task<User> GetUserById(string userId)
         {
-            return await _userCollections.Find(Builders<User>.Filter.Eq(x => x.userId, userId)).FirstOrDefaultAsync();
+            return await _userCollections.Find(Builders<User>.Filter.Eq(x => x.userId, userId))
+                .FirstOrDefaultAsync();
         }
         public async Task<User> GetUserByName(string userName)
         {
@@ -83,12 +83,48 @@ namespace Sengoku.API.Repositories
                 };
                 var createdUser = await GetUserById(newUser.userId);
                 await _userCollections.InsertOneAsync(newUser);
-                return new UserResponse(createdUser);
+                return new UserResponse(true, "User Created", createdUser);
             }
             catch (Exception ex)
             {
                 return ex.Message.StartsWith("MongoError: E1100 duplicate key error")
                     ? new UserResponse(false, "A user with the given email already exists.")
+                    : new UserResponse(false, ex.Message);
+            }
+        }
+        public async Task<UserResponse> DeleteUser(string email)
+        {
+            try
+            {
+                var deletedUser = await _userCollections.FindOneAndDeleteAsync(Builders<User>.Filter.Eq(found => found.Email, email));
+                if(!_userCollections.AsQueryable<User>().Any(exists => exists.Email == deletedUser.Email))
+                    return new UserResponse(true, "User Deleted", deletedUser);
+                return new UserResponse(false, "User deletion was unsuccessful", deletedUser);
+            }
+            catch (Exception ex)
+            {
+                return new UserResponse(false, ex.ToString());
+            }
+        }
+        public async Task<UserResponse> UpdateUserEmail(string email, string updatedEmail)
+        {
+            try
+            {
+                var updatedUser = await _userCollections.FindOneAndUpdateAsync(
+                  Builders<User>.Filter.Where(rec => rec.Email == email),
+                  Builders<User>.Update
+                    .Set(rec => rec.Email, updatedEmail),
+                  options: new FindOneAndUpdateOptions<User>
+                  {
+                      ReturnDocument = ReturnDocument.After
+                  });
+
+                return new UserResponse(true, "User Updated", updatedUser);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message.StartsWith("MongoError: E1100 duplicate key error")
+                    ? new UserResponse(false, "User could not be updated.")
                     : new UserResponse(false, ex.Message);
             }
         }

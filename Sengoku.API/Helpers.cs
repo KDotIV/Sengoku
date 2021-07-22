@@ -7,7 +7,7 @@ namespace Sengoku.API
 {
     public class Helpers
     {
-        private static Random rand = new Random();
+        public static Random rand = new Random();
         private static string GetRandom(IList<string> items)
         {
             return items[rand.Next(items.Count)];
@@ -30,20 +30,19 @@ namespace Sengoku.API
             }
             return userName;
         }
-        public static string MakeUniqueEventName(List<string> names)
+        public static string MakeUniqueEventName(List<string> names = null)
         {
             var maxNames = eventPrefix.Count * eventSuffix.Count;
-            if(names.Count >= maxNames)
-            {
-                throw new System.InvalidOperationException("Maximum number of unique names exceeded");
-            }
             var prefix = GetRandom(eventPrefix);
             var suffix = GetRandom(eventSuffix);
             var eventName = prefix + suffix;
 
-            if(names.Contains(eventName))
+            if(names != null)
             {
-                MakeUniqueEventName(names);
+                if (names.Contains(eventName))
+                {
+                    MakeUniqueEventName(names);
+                }
             }
             return eventName;
         }
@@ -97,6 +96,13 @@ namespace Sengoku.API
                 res.Append(valid[rand.Next(valid.Length)]);
             }
             string newId = res.ToString();
+            if(eventIds != null)
+            {
+                if (eventIds.Contains(newId))
+                {
+                    MakeUniqueEventName(eventIds);
+                }
+            }
             return newId;
         }
         public static string GetRandomCity()
@@ -127,13 +133,9 @@ namespace Sengoku.API
             }
             return res.ToString();
         }
-        public static Address MakeUniqueAddress(List<Address> addresses)
+        public static Address MakeUniqueAddress(List<Address> addresses = null)
         {
             var maxAddresses = streetNamePreFix.Count * streetNameSuffix.Count;
-            if (addresses.Count >= maxAddresses)
-            {
-                throw new System.InvalidOperationException("Maximum number of unique addresses exceeded");
-            }
             var streetNum = GetRandomStreetNum();
             var prefix = GetRandom(streetNamePreFix);
             var suffix = GetRandom(streetNameSuffix);
@@ -146,11 +148,6 @@ namespace Sengoku.API
                 Street = streetName,
                 Zipcode = zipCode
             };
-
-            if (addresses.Contains(newAddress))
-            {
-                MakeUniqueAddress(addresses);
-            }
             return newAddress;
         }
         private static readonly List<string> usStates = new List<string>()

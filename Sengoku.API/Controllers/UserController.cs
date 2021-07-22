@@ -31,23 +31,23 @@ namespace Sengoku.API.Controllers
             return Ok(users);
         }
 
-        [HttpGet("GetUserEmail/{userId}", Name = "GetUserEmail")]
+        [HttpGet("GetUserEmail/{userId}")]
         public async Task<ActionResult> GetUserEmailAsync(string userId)
         {
             var userEmail = await _userRepository.GetUserEmail(userId);
-            return Ok(new UserResponse(userEmail));
+            return Ok(userEmail);
         }
-        [HttpGet("GetUserById/{userId}", Name = "GetUserById")]
+        [HttpGet("GetUserById/{userId}", Name = "GetUserId")]
         public async Task<ActionResult> GetUserByIdAsync(string userId)
         {
             var result = await _userRepository.GetUserById(userId);
-            return Ok(new UserResponse(result));
+            return Ok(result);
         }
-        [HttpGet("GetUserByName/{userName}", Name = "GetUserByName")]
+        [HttpGet("GetUserByName/{userName}", Name = "GetUserName")]
         public async Task<ActionResult> GetUserByNameAsync(string userName)
         {
             var result = await _userRepository.GetUserByName(userName);
-            return Ok(new UserResponse(result));
+            return Ok(result);
         }
         [HttpPost]
         [Route("RegisterUser")]
@@ -58,7 +58,20 @@ namespace Sengoku.API.Controllers
             {
                 return BadRequest(new { error = response.ErrorMessage });
             }
-            return Ok(response.User);
+            return Ok(response);
+        }
+        [HttpDelete("DeleteUser/{email}")]
+        public async Task<ActionResult> DeleteUserAsync(string email)
+        {
+            var result = await _userRepository.DeleteUser(email);
+            return Ok(result);
+        }
+        [HttpPut("UpdateUserEmail/{userId}")]
+        public async Task<ActionResult> UpdateUserEmailAsync([FromBody] User user, string userId)
+        {
+            var userToUpdate = await _userRepository.GetUserById(userId);
+            var result = await _userRepository.UpdateUserEmail(userToUpdate.Email, user.Email);
+            return Ok(result);
         }
     }
 }

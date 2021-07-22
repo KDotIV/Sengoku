@@ -18,5 +18,6 @@ namespace Sengoku.API.Models
         [BsonElement("description")] public string Description { get; set; }
         [BsonElement("price")] public decimal Price { get; set; }
         [BsonElement("stock")] public int Stock { get; set; }
+        [BsonElement("supplier")] public string Supplier { get; set; }
     }
 }
