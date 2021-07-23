@@ -20,6 +20,7 @@ namespace Migrator
         private static IMongoCollection<Events> _eventsCollection;
         private static IMongoCollection<Products> _productsCollection;
         private static IMongoCollection<Orders> _ordersCollection;
+        private static IMongoCollection<Tickets> _ticketsCollection;
 
         static string mongoConnectionString = "mongodb+srv://shogun:821XVvZqg@province.rk4mm.mongodb.net/Sengoku?retryWrites=true&w=majority";
 
@@ -30,7 +31,8 @@ namespace Migrator
             //await BulkInsertEvents(10);
             //await BulkInsertUsers(50);
             //await BulkInsertProducts(20);
-            await BulkInsertOrders(25);
+            //await BulkInsertOrders(25);
+            await BulkInsertTickets(28);
         }
         public static async Task BulkInsertUsers(int nUsers)
         {
@@ -167,11 +169,39 @@ namespace Migrator
         public static async Task BulkInsertTickets(int nTickets)
         {
             var listWrites = new List<WriteModel<Tickets>>();
+            List<User> userList = GetUsers();
+            List<Events> eventList = GetAllEvents();
 
             for (int i = 0; i < nTickets; i++)
             {
+                string newTicketId = Helpers.MakeRandomID();
+                if (_ticketsCollection.AsQueryable().Any(exists => exists.Confirmation_Id == newTicketId))
+                {
+                    newTicketId = Helpers.MakeRandomID();
+                }
+                var index = Helpers.rand.Next(0, userList.Count);
+                var orderAddress = Helpers.MakeUniqueAddress();
+                var eventIndex = Helpers.rand.Next(0, eventList.Count);
+                int randomIndex = Helpers.rand.Next(1, 5);
 
+                var newTicket = new Tickets
+                {
+                    Confirmation_Id = newTicketId,
+                    Pass_Type = "Competitor",
+                    Event = eventList[eventIndex],
+                    User_Id = userList[index].Name,
+                    Payment_Date = Helpers.GetRandomOrderPlaced(),
+                    Venue_Fee = 20.00M,
+                    Processing_Fee = 0.03M,
+                    Total_Cost = 20.00M + 0.03M,
+                    Payment_Amount = 20.03M,
+                    Payment_Method = "paypal",
+                    Transaction_Id = Helpers.MakeRandomID()
+                };
+                listWrites.Add(new InsertOneModel<Tickets>(newTicket));
             }
+            var resultWrites = await _ticketsCollection.BulkWriteAsync(listWrites);
+            Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted Count: {resultWrites.InsertedCount}");
         }
         public static List<User> GetUsers()
         {
@@ -191,6 +221,15 @@ namespace Migrator
 
             return products;
         }
+        public static List<Events> GetAllEvents()
+        {
+            var events = _eventsCollection
+                .Find(events => true)
+                .Project<Events>(Builders<Events>.Projection.Exclude("_id"))
+                .ToList();
+
+            return events;
+        }
         static void Setup()
         {
             var camelCaseConvention = new ConventionPack { new CamelCaseElementNameConvention() };
@@ -203,6 +242,7 @@ namespace Migrator
             _eventsCollection = sengokuDatabase.GetCollection<Events>("Events");
             _productsCollection = sengokuDatabase.GetCollection<Products>("Products");
             _ordersCollection = sengokuDatabase.GetCollection<Orders>("Orders");
+            _ticketsCollection = sengokuDatabase.GetCollection<Tickets>("Tickets");
         }
     }
 }

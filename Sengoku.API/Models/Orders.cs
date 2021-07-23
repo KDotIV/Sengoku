@@ -17,8 +17,8 @@ namespace Sengoku.API.Models
         [BsonElement("user_id")] public User User { get; set; }
         [BsonElement("shipping_address")] public Address Shipping_Address { get; set; }
         [BsonElement("billing_address")] public Address Billing_Address { get; set; }
-        [BsonElement("date")] public DateTimeOffset OrderDate { get; set; }
-        [BsonElement("completed_date")] public DateTimeOffset CompletedDate { get; set; }
+        [BsonElement("date")] public DateTime OrderDate { get; set; }
+        [BsonElement("completed_date")] public DateTime CompletedDate { get; set; }
         [BsonElement("product")] public Products[] Products { get; set; }
         [BsonElement("processing_fee")] public decimal Processing_Fee { get; set; }
         [BsonElement("total_cost")] public decimal Total_Cost { get; set; }

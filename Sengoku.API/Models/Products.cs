@@ -13,7 +13,7 @@ namespace Sengoku.API.Models
     {
         [JsonProperty("_id")]
         [BsonId] public ObjectId Id { get; set; }
-        [BsonElement("product_id")] public string Product_Id { get; set;  }
+        [BsonElement("product_id")] public string Product_Id { get; set; }
         [BsonElement("product_name")] public string Product_Name { get; set; }
         [BsonElement("description")] public string Description { get; set; }
         [BsonElement("price")] public decimal Price { get; set; }

@@ -10,7 +10,6 @@ namespace Sengoku.API.Models.Responses
 {
     public class EventsResponse
     {
-        private static readonly int MOVIES_PER_PAGE = 20;
         [JsonProperty("events", NullValueHandling = NullValueHandling.Ignore)]
         public Events Events { get; set; }
         [JsonProperty("eventsList", NullValueHandling = NullValueHandling.Ignore)]

@@ -31,28 +31,28 @@ namespace Sengoku.API.Controllers
             return Ok(products);
         }
         [HttpGet]
-        [Route("GetProduct/{productId}", Name = "GetProductId")]
+        [Route("GetProductId/{productId}", Name = "GetProductId")]
         public async Task<ActionResult> GetProductByIdAsync(string productId)
         {
             var result = await _productsRepository.GetProductById(productId);
             return Ok(result);
         }
         [HttpGet]
-        [Route("GetProductByName/{productName}", Name = "GetProductName")]
+        [Route("GetProductName/{productName}", Name = "GetProductName")]
         public async Task<ActionResult> GetProductByNameAsync(string productName)
         {
             var products = await _productsRepository.GetProductByName(productName);
             return Ok(products);
         }
         [HttpGet]
-        [Route("GetProductBySupplier/{supplierName}", Name = "GetProductSupplier")]
+        [Route("GetProductSupplier/{supplierName}", Name = "GetProductSupplier")]
         public async Task<ActionResult> GetProductBySupplierAsync(string supplierName)
         {
             var products = await _productsRepository.GetProductBySupplier(supplierName);
             return Ok(products);
         }
         [HttpGet]
-        [Route("GetProduct/{productId}", Name = "GetProductPrice")]
+        [Route("GetProductPrice/{productId}", Name = "GetProductPrice")]
         public async Task<ActionResult> GetProductPriceAsync(string productId)
         {
             var result = await _productsRepository.GetProductPrice(productId);
