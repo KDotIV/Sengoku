@@ -31,8 +31,8 @@ namespace Migrator
             //await BulkInsertEvents(10);
             //await BulkInsertUsers(50);
             //await BulkInsertProducts(20);
-            //await BulkInsertOrders(25);
-            await BulkInsertTickets(28);
+            await BulkInsertOrders(25);
+            //await BulkInsertTickets(28);
         }
         public static async Task BulkInsertUsers(int nUsers)
         {
@@ -61,7 +61,7 @@ namespace Migrator
             }
 
             var resultWrites = await _userCollection.BulkWriteAsync(listWrites);
-            Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted Count: {resultWrites.InsertedCount}");
+            Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted User Count: {resultWrites.InsertedCount}");
         }
         public static async Task BulkInsertEvents(int nEvents)
         {
@@ -95,7 +95,7 @@ namespace Migrator
                 listWrites.Add(new InsertOneModel<Events>(newEvent));
             }
             var resultWrites = await _eventsCollection.BulkWriteAsync(listWrites);
-            Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted Count: {resultWrites.InsertedCount}");
+            Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted Events Count: {resultWrites.InsertedCount}");
         }
         public static async Task BulkInsertProducts(int nProducts)
         {
@@ -119,7 +119,7 @@ namespace Migrator
                 listWrites.Add(new InsertOneModel<Products>(newProduct));
             }
             var resultWrites = await _productsCollection.BulkWriteAsync(listWrites);
-            Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted Count: {resultWrites.InsertedCount}");
+            Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted Products Count: {resultWrites.InsertedCount}");
         }
         public static async Task BulkInsertOrders(int nOrders)
         {
@@ -164,7 +164,7 @@ namespace Migrator
                 listWrites.Add(new InsertOneModel<Orders>(newOrder));
             }
             var resultWrites = await _ordersCollection.BulkWriteAsync(listWrites);
-            Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted Count: {resultWrites.InsertedCount}");
+            Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted Orders Count: {resultWrites.InsertedCount}");
         }
         public static async Task BulkInsertTickets(int nTickets)
         {
@@ -201,7 +201,7 @@ namespace Migrator
                 listWrites.Add(new InsertOneModel<Tickets>(newTicket));
             }
             var resultWrites = await _ticketsCollection.BulkWriteAsync(listWrites);
-            Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted Count: {resultWrites.InsertedCount}");
+            Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted Tickets Count: {resultWrites.InsertedCount}");
         }
         public static List<User> GetUsers()
         {
