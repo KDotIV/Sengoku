@@ -72,5 +72,112 @@ namespace Sengoku.API.Repositories
 
             return tickets;
         }
+        public async Task<TicketsResponse> AddTicket(string pass_type, Events events, string userId,
+            DateTime paymentDate, decimal venueFee, decimal processingFee, decimal totalCost,
+            decimal paymentAmount, string paymentMethod)
+        {
+            string randId = Helpers.MakeRandomID();
+            string tranId = Helpers.MakeRandomID();
+            if (CheckTicketDb(randId, tranId))
+            {
+                await AddTicket(pass_type, events, userId, paymentDate,
+                    venueFee, processingFee, totalCost, paymentAmount, paymentMethod);
+            }
+            try
+            {
+                var newTicket = new Tickets()
+                {
+                    Confirmation_Id = randId,
+                    Pass_Type = pass_type,
+                    Event = events,
+                    User_Id = userId,
+                    Payment_Date = DateTime.Now,
+                    Venue_Fee = venueFee,
+                    Processing_Fee = processingFee,
+                    Total_Cost = totalCost,
+                    Payment_Amount = paymentAmount,
+                    Payment_Method = paymentMethod,
+                    Transaction_Id = tranId
+                };
+                var createdTicket = await GetTicketById(newTicket.Confirmation_Id);
+                await _ticketsCollection.InsertOneAsync(newTicket);
+                return new TicketsResponse(true, "Order Created", createdTicket);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message.StartsWith("MongoError: E1100 duplicate key error")
+                    ? new TicketsResponse(false, "A Order with this ID already exists.")
+                    : new TicketsResponse(false, ex.Message);
+            }
+        }
+        public async Task<TicketsResponse> DeleteTicket(string ticketId)
+        {
+            try
+            {
+                var deletedTicket = await _ticketsCollection.FindOneAndDeleteAsync(Builders<Tickets>
+                    .Filter.Eq(x => x.Confirmation_Id, ticketId));
+                if (!_ticketsCollection.AsQueryable<Tickets>().Any(exists => exists.Confirmation_Id == deletedTicket.Confirmation_Id))
+                    return new TicketsResponse(true, "Ticket Deleted", deletedTicket);
+                return new TicketsResponse(false, "Ticket failed to be deleted", deletedTicket);
+            }
+            catch (Exception ex)
+            {
+                return new TicketsResponse(false, ex.ToString());
+            }
+        }
+        public async Task<TicketsResponse> UpdateTicketByEvent(string confirmId, Events eventToUpdate)
+        {
+            try
+            {
+                var updatedTicket = await _ticketsCollection.FindOneAndUpdateAsync(
+                    Builders<Tickets>.Filter.Where(rec => rec.Confirmation_Id == confirmId),
+                    Builders<Tickets>.Update
+                    .Set(rec => rec.Event, eventToUpdate),
+                    options: new FindOneAndUpdateOptions<Tickets>
+                    {
+                        ReturnDocument = ReturnDocument.After
+                    });
+                return new TicketsResponse(true, "Ticket Updated", updatedTicket);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message.StartsWith("MongoError: E1100 duplicate key error")
+                    ? new TicketsResponse(false, "Ticket could not be updated")
+                    : new TicketsResponse(false, ex.Message);
+            }
+        }
+        public async Task<TicketsResponse> UpdateTicketByPassType(string confirmId, string passType)
+        {
+            try
+            {
+                var updatedTicket = await _ticketsCollection.FindOneAndUpdateAsync(
+                    Builders<Tickets>.Filter.Where(rec => rec.Confirmation_Id == confirmId),
+                    Builders<Tickets>.Update
+                    .Set(rec => rec.Pass_Type, passType),
+                    options: new FindOneAndUpdateOptions<Tickets>
+                    {
+                        ReturnDocument = ReturnDocument.After
+                    });
+                return new TicketsResponse(true, "Ticket Updated", updatedTicket);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message.StartsWith("MongoError: E1100 duplicate key error")
+                    ? new TicketsResponse(false, "Ticket could not be updated")
+                    : new TicketsResponse(false, ex.Message);
+            }
+        }
+        public bool CheckTicketDb(string confirmationId, string transId)
+        {
+            if(confirmationId != null)
+            {
+                if(_ticketsCollection.AsQueryable<Tickets>().Any(exists => exists.Confirmation_Id == confirmationId)) { return true; }
+            }
+            if(transId != null)
+            {
+                if(_ticketsCollection.AsQueryable<Tickets>().Any(exists => exists.Transaction_Id == transId)) { return true; }
+            }
+            return false;
+        }
     }
 }

@@ -63,7 +63,7 @@ namespace Sengoku.API.Controllers
             return Ok(result);
         }
         [HttpPost]
-        [Route("AddOrder")]
+        [Route("CreateOrder")]
         public async Task<ActionResult> AddOrderAsync([FromBody] Orders order)
         {
             var response = await _ordersRepository.AddOrderAsync(order.Total_Cost, order.Payment_Amount, order.Payment_Method,
@@ -83,7 +83,7 @@ namespace Sengoku.API.Controllers
         public async Task<ActionResult> UpdateCompletedDate([FromBody] Orders dateRequest, string orderId)
         {
             var orderToUpdate = await _ordersRepository.GetOrderById(orderId);
-            var dateResult = await _ordersRepository.UpdateOrderCompleted(orderId, dateRequest.CompletedDate);
+            var dateResult = await _ordersRepository.UpdateOrderCompleted(orderToUpdate.Order_Id, dateRequest.CompletedDate);
 
             return Ok(dateResult);
         }
