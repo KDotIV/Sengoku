@@ -26,6 +26,10 @@ namespace Sengoku.API
             services.AddSingleton<IMongoDBContext, DBContext>();
             services.AddControllers();
 
+            services.AddCors(options => options.AddDefaultPolicy(
+                    builder => builder.AllowAnyOrigin()
+                ));
+
             services.RegisterMongoDbRepositories();
 
             services.Configure<MongoSettings>(options =>
@@ -33,8 +37,6 @@ namespace Sengoku.API
                 options.MongoURI = Configuration.GetSection("MongoSettings:MongoURI").Value;
                 options.DatabaseName = Configuration.GetSection("MongoSettings:DatabaseName").Value;
             });
-
-            // In production, the React files will be served from this directory
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +47,9 @@ namespace Sengoku.API
 
             app.UseRouting();
 
+            app.UseCors();
+
+            //app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
