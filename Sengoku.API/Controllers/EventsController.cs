@@ -36,7 +36,7 @@ namespace Sengoku.API.Controllers
         {
             var result = await _eventsRepository.GetEventById(eventId);
             if (result == null) return BadRequest(new ErrorResponse("No Event with that ID"));
-            return Ok(new EventsResponse(result));
+            return Ok(result);
         }
         [HttpGet("GetEventByName/{eventName}", Name = "GetEventByName")]
         public async Task<ActionResult> GetEventByName(string eventName)
