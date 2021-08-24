@@ -8,7 +8,7 @@ export const loadEvents = () => async (dispatch) =>{
     dispatch({
         type: "FETCH_EVENTS",
         payload: {
-            events: eventsData.data,
+            eventResult: eventsData.data,
         },
     })
 }

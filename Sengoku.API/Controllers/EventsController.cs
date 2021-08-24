@@ -28,7 +28,7 @@ namespace Sengoku.API.Controllers
             int sort = -1)
         {
             var events = await _eventsRepository.GetEvents(limit, page, sort);
-            return Ok(new EventsResponse(events, page, null));
+            return Ok(events);
         }
 
         [HttpGet("GetEventByID/{eventId}", Name = "GetEventById")]
