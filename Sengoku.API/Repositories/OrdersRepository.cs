@@ -106,9 +106,8 @@ namespace Sengoku.API.Repositories
                     Payment_Method = paymentMethod,
                     Transaction_Id = tranId
                 };
-                var createdOrder = await GetOrderById(newOrder.Order_Id);
                 await _ordersCollection.InsertOneAsync(newOrder);
-                return new OrdersResponse(true, "Order Created", createdOrder);
+                return new OrdersResponse(true, "Order Created", newOrder);
             }
             catch (Exception ex)
             {

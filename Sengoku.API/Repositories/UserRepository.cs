@@ -81,9 +81,8 @@ namespace Sengoku.API.Repositories
                     LastUpdated = DateTime.Now
 
                 };
-                var createdUser = await GetUserById(newUser.userId);
                 await _userCollections.InsertOneAsync(newUser);
-                return new UserResponse(true, "User Created", createdUser);
+                return new UserResponse(true, "User Created", newUser);
             }
             catch (Exception ex)
             {

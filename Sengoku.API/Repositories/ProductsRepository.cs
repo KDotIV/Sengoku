@@ -102,9 +102,8 @@ namespace Sengoku.API.Repositories
                     Stock = stock,
                     Supplier = supplier
                 };
-                var createdProduct = await GetProductById(newProduct.Product_Id);
                 await _productsCollection.InsertOneAsync(newProduct);
-                return new ProductResponse(true, "Product Created", createdProduct);
+                return new ProductResponse(true, "Product Created", newProduct);
             }
             catch (Exception ex)
             {
