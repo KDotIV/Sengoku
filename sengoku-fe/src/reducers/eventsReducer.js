@@ -1,5 +1,3 @@
-
-
 const initState = {
     allEvents: [],
     searched: [],

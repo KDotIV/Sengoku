@@ -69,7 +69,6 @@ namespace Sengoku.API.Controllers
         [HttpPut("UpdateTicketEvent/{confirmId}")]
         public async Task<ActionResult> UpdateTicketEventAsync([FromBody] Tickets eventRequest, string confirmId)
         {
-            var ticketToUpdate = await _ticketsRepository.GetTicketById(confirmId);
             var eventResult = await _ticketsRepository.UpdateTicketByEvent(confirmId, eventRequest.Event);
 
             return Ok(eventResult);
