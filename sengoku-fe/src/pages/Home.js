@@ -30,7 +30,7 @@ const Home = () => {
                         eventLocation={result.city}
                         key={result.event_Id}
                         />
-                    ))};
+                    ))}
                 </EventsStyle>
             </EventList>
             </div>
