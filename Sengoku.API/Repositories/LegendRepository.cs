@@ -130,7 +130,7 @@ namespace Sengoku.API.Repositories
                     : new LegendResponse(false, ex.Message);
             }
         }
-        public async Task<LegendResponse> DeletePlayerCard(string legendId)
+        public async Task<LegendResponse> DeleteLegend(string legendId)
         {
             try
             {

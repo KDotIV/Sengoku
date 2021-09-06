@@ -56,7 +56,7 @@ namespace Sengoku.API.Repositories
                 .Project<PlayerCards>(staticExclution)
                 .FirstOrDefaultAsync();
         }
-        public async Task<List<PlayerCards>> GetPlayerByEvent(string playerId)
+        public async Task<List<PlayerCards>> GetPlayersEvents(string playerId)
         {
             var filter = Builders<PlayerCards>.Filter.Eq(result => result.playerId, playerId);
             var project = Builders<PlayerCards>.Projection.Include(result => result.events).Exclude("_id");
