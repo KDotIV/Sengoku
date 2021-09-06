@@ -62,5 +62,14 @@ namespace Sengoku.API.Repositories
 
             return events;
         }
+        public bool CheckEventsDb(string eventId)
+        {
+            if (eventId != null)
+            {
+                if (_eventsCollection.AsQueryable<Events>().Any(exists => exists.Event_Id == eventId)) return true;
+            }
+            else return false;
+            return false;
+        }
     }
 }

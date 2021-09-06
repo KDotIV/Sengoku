@@ -16,6 +16,7 @@ namespace Sengoku.API.Repositories
     {
         private readonly IMongoDBContext _ctx;
         private readonly IMongoCollection<PlayerCards> _playerCollections;
+        private readonly IMongoCollection<Events> _eventsCollection;
 
         private const int DefaultPlayersPerPage = 20;
         private const int DefaultSortOrder = -1;
@@ -27,6 +28,7 @@ namespace Sengoku.API.Repositories
             ConventionRegistry.Register("CamelCase", camelCaseConvention, type => true);
             _ctx = context;
             _playerCollections = _ctx.GetCollection<PlayerCards>("PlayerCards");
+            _eventsCollection = _ctx.GetCollection<Events>("Events");
         }
 
         public async Task<List<PlayerCards>> GetAllPlayers(int playersPerPage = DefaultPlayersPerPage, int page = 0,
@@ -101,7 +103,7 @@ namespace Sengoku.API.Repositories
         public async Task<PlayerCardResponse> AddEventToPlayerCard(string playerId, string name = null, string date = null, string city = null, string game = null)
         {
             string randId = Helpers.MakeRandomID();
-            if (CheckPlayerDb(randId))
+            if (CheckEventsDb(randId))
             {
                 await AddEventToPlayerCard(playerId, name, date, city, game);
             }
@@ -200,6 +202,15 @@ namespace Sengoku.API.Repositories
                 if(_playerCollections.AsQueryable<PlayerCards>().Any(exists => exists.playerId == playerId)) { return true;  }
             }
             else { return false;  }
+            return false;
+        }
+        private bool CheckEventsDb(string eventsId)
+        {
+            if (eventsId != null)
+            {
+                if (_eventsCollection.AsQueryable<Events>().Any(exists => exists.Event_Id == eventsId)) return true;
+            }
+            else return false;
             return false;
         }
     }

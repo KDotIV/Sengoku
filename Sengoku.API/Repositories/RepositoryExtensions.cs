@@ -22,6 +22,7 @@ namespace Sengoku.API.Repositories
             servicesBuilder.AddSingleton<PlayerRepository>();
             servicesBuilder.AddSingleton<PlotRepository>();
             servicesBuilder.AddSingleton<ClipRepository>();
+            servicesBuilder.AddSingleton<LegendRepository>();
         }
     }
 }
