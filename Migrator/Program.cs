@@ -17,10 +17,12 @@ namespace Migrator
     class Program
     {
         private static IMongoCollection<User> _userCollection;
+        private static IMongoCollection<PlayerCards> _playerCollection;
+        private static IMongoCollection<Plot> _plotCollection;
+        private static IMongoCollection<Clip> _clipsCollection;
         private static IMongoCollection<Events> _eventsCollection;
         private static IMongoCollection<Products> _productsCollection;
         private static IMongoCollection<Orders> _ordersCollection;
-        private static IMongoCollection<Tickets> _ticketsCollection;
 
         static string mongoConnectionString = "mongodb+srv://shogun:821XVvZqg@province.rk4mm.mongodb.net/Sengoku?retryWrites=true&w=majority";
 
@@ -63,40 +65,6 @@ namespace Migrator
             var resultWrites = await _userCollection.BulkWriteAsync(listWrites);
             Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted User Count: {resultWrites.InsertedCount}");
         }
-        public static async Task BulkInsertEvents(int nEvents)
-        {
-            var listWrites = new List<WriteModel<Events>>();
-            var eventNames = new List<string>();
-            var addresses = new List<Address>();
-            var eventIDs = new List<string>();
-
-            for(int i = 0; i < nEvents; i++)
-            {
-                var eventName = Helpers.MakeUniqueEventName(eventNames);
-                eventNames.Add(eventName);
-
-                var eventAddress = Helpers.MakeUniqueAddress(addresses);
-                addresses.Add(eventAddress);
-
-                var eventId = Helpers.MakeRandomID(eventIDs);
-                eventIDs.Add(eventId);
-
-                var newEvent = new Events
-                {
-                    Name = eventName,
-                    Address = eventAddress,
-                    Status = "Not Started",
-                    Date = Helpers.GetRandomOrderPlaced(),
-                    Event_Id = eventId,
-                    City = Helpers.GetRandomCity(),
-                    Game = Helpers.GetRandomGame(),
-                    LastUpdated = Helpers.GetRandomOrderPlaced()
-                };
-                listWrites.Add(new InsertOneModel<Events>(newEvent));
-            }
-            var resultWrites = await _eventsCollection.BulkWriteAsync(listWrites);
-            Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted Events Count: {resultWrites.InsertedCount}");
-        }
         public static async Task BulkInsertProducts(int nProducts)
         {
             var listWrites = new List<WriteModel<Products>>();
@@ -135,7 +103,6 @@ namespace Migrator
                     newOrderId = Helpers.MakeRandomID();
                 }
                 var index = Helpers.rand.Next(0, userList.Count);
-                var orderAddress = Helpers.MakeUniqueAddress();
                 var prodIndex = Helpers.rand.Next(0, prodList.Count);
                 int randomIndex = Helpers.rand.Next(1, 5);
                 Products[] products = new Products[randomIndex];
@@ -151,8 +118,6 @@ namespace Migrator
                 {
                     Order_Id = newOrderId,
                     User = userList[index],
-                    Shipping_Address = orderAddress,
-                    Billing_Address = orderAddress,
                     OrderDate = Helpers.GetRandomOrderPlaced(),
                     Products = products,
                     Processing_Fee = 0.03M,
@@ -166,43 +131,6 @@ namespace Migrator
             var resultWrites = await _ordersCollection.BulkWriteAsync(listWrites);
             Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted Orders Count: {resultWrites.InsertedCount}");
         }
-        public static async Task BulkInsertTickets(int nTickets)
-        {
-            var listWrites = new List<WriteModel<Tickets>>();
-            List<User> userList = GetUsers();
-            List<Events> eventList = GetAllEvents();
-
-            for (int i = 0; i < nTickets; i++)
-            {
-                string newTicketId = Helpers.MakeRandomID();
-                if (_ticketsCollection.AsQueryable().Any(exists => exists.Confirmation_Id == newTicketId))
-                {
-                    newTicketId = Helpers.MakeRandomID();
-                }
-                var index = Helpers.rand.Next(0, userList.Count);
-                var orderAddress = Helpers.MakeUniqueAddress();
-                var eventIndex = Helpers.rand.Next(0, eventList.Count);
-                int randomIndex = Helpers.rand.Next(1, 5);
-
-                var newTicket = new Tickets
-                {
-                    Confirmation_Id = newTicketId,
-                    Pass_Type = "Competitor",
-                    Event = eventList[eventIndex],
-                    User_Id = userList[index].Name,
-                    Payment_Date = Helpers.GetRandomOrderPlaced(),
-                    Venue_Fee = 20.00M,
-                    Processing_Fee = 0.03M,
-                    Total_Cost = 20.00M + 0.03M,
-                    Payment_Amount = 20.03M,
-                    Payment_Method = "paypal",
-                    Transaction_Id = Helpers.MakeRandomID()
-                };
-                listWrites.Add(new InsertOneModel<Tickets>(newTicket));
-            }
-            var resultWrites = await _ticketsCollection.BulkWriteAsync(listWrites);
-            Console.WriteLine($"OK?: {resultWrites.IsAcknowledged} - Inserted Tickets Count: {resultWrites.InsertedCount}");
-        }
         public static List<User> GetUsers()
         {
             var users = _userCollection
@@ -212,15 +140,6 @@ namespace Migrator
 
             return users;
         }
-        public static List<Products> GetAllProducts()
-        {
-            var products = _productsCollection
-                .Find(products => true)
-                .Project<Products>(Builders<Products>.Projection.Exclude("_id"))
-                .ToList();
-
-            return products;
-        }
         public static List<Events> GetAllEvents()
         {
             var events = _eventsCollection
@@ -229,6 +148,15 @@ namespace Migrator
                 .ToList();
 
             return events;
+        }
+        public static List<Products> GetAllProducts()
+        {
+            var products = _productsCollection
+                .Find(products => true)
+                .Project<Products>(Builders<Products>.Projection.Exclude("_id"))
+                .ToList();
+
+            return products;
         }
         static void Setup()
         {
@@ -240,9 +168,11 @@ namespace Migrator
             var sengokuDatabase = _client.GetDatabase("Sengoku");
             _userCollection = sengokuDatabase.GetCollection<User>("Users");
             _eventsCollection = sengokuDatabase.GetCollection<Events>("Events");
-            _productsCollection = sengokuDatabase.GetCollection<Products>("Products");
+            _playerCollection = sengokuDatabase.GetCollection<PlayerCards>("PlayerCards");
+            _clipsCollection = sengokuDatabase.GetCollection<Clip>("Clips");
+            _plotCollection = sengokuDatabase.GetCollection<Plot>("Plot");
             _ordersCollection = sengokuDatabase.GetCollection<Orders>("Orders");
-            _ticketsCollection = sengokuDatabase.GetCollection<Tickets>("Tickets");
+            _productsCollection = sengokuDatabase.GetCollection<Products>("Products");
         }
     }
 }

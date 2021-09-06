@@ -133,7 +133,7 @@ namespace Sengoku.API
             }
             return res.ToString();
         }
-        public static Address MakeUniqueAddress(List<Address> addresses = null)
+/*        public static Address MakeUniqueAddress(List<Address> addresses = null)
         {
             var maxAddresses = streetNamePreFix.Count * streetNameSuffix.Count;
             var streetNum = GetRandomStreetNum();
@@ -149,7 +149,7 @@ namespace Sengoku.API
                 Zipcode = zipCode
             };
             return newAddress;
-        }
+        }*/
         private static readonly List<string> usStates = new List<string>()
         {
             "AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT",

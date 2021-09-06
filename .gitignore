@@ -653,3 +653,6 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/react,visualstudio,visualstudiocode,node,dotnetcore,aspnetcore
 Sengoku.API/appsettings.Development.json
 Sengoku.API/appsettings.json
+
+# Specific Folders
+Migrator/
