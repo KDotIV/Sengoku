@@ -81,14 +81,14 @@ namespace Sengoku.API.Repositories
             return result;
         }
         public async Task<OrdersResponse> AddOrderAsync(decimal totalCost, decimal paymentAmount, string paymentMethod, decimal processingFee = 0.30M,
-            Products[] productList = null,User user = null, Address shippingAddress = null, Address billingAddress = null)
+            Products[] productList = null,User user = null)
         {
             string randId = Helpers.MakeRandomID();
             string tranId = Helpers.MakeRandomID();
             if (CheckOrderDb(randId, tranId))
             {
                 await AddOrderAsync(totalCost, paymentAmount, paymentMethod, processingFee,
-                    productList, user, shippingAddress, billingAddress);
+                    productList, user);
             }
             try
             {
@@ -96,8 +96,6 @@ namespace Sengoku.API.Repositories
                 {
                     Order_Id = randId,
                     User = user,
-                    Shipping_Address = shippingAddress,
-                    Billing_Address = billingAddress,
                     OrderDate = DateTime.Now,
                     Products = productList,
                     Processing_Fee = processingFee,
