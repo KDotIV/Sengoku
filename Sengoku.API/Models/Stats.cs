@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Sengoku.API.Models
     [BsonIgnoreExtraElements]
     public class Stats
     {
+        [JsonProperty("_id")]
         [BsonId] public ObjectId Id { get; set; }
         [BsonElement("statId")] public string statId { get; set; }
         [BsonElement("playstyle")] public string playstyle { get; set; }

@@ -62,17 +62,6 @@ namespace Sengoku.API.Controllers
             var result = await _ordersRepository.GetOrderById(tranId);
             return Ok(result);
         }
-        [HttpPost]
-        [Route("CreateOrder")]
-        public async Task<ActionResult> AddOrderAsync([FromBody] Orders order)
-        {
-            var response = await _ordersRepository.AddOrderAsync(order.Total_Cost, order.Payment_Amount, order.Payment_Method,
-                order.Processing_Fee, order.Products, order.User, order.Shipping_Address, order.Billing_Address);
-
-            if(!response.Success) { return BadRequest(new { error = response.ErrorMessage }); }
-
-            return Ok(response);
-        }
         [HttpDelete("DeleteOrder/{orderId}")]
         public async Task<ActionResult> DeleteOrderAsync(string orderId)
         {
