@@ -15,8 +15,6 @@ namespace Sengoku.API.Models
         [BsonId] public ObjectId Id { get; set; }
         [BsonElement("order_id")] public string Order_Id { get; set; }
         [BsonElement("user_id")] public User User { get; set; }
-        [BsonElement("shipping_address")] public Address Shipping_Address { get; set; }
-        [BsonElement("billing_address")] public Address Billing_Address { get; set; }
         [BsonElement("date")] public DateTime OrderDate { get; set; }
         [BsonElement("completed_date")] public DateTime CompletedDate { get; set; }
         [BsonElement("product")] public Products[] Products { get; set; }
