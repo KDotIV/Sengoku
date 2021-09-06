@@ -31,19 +31,19 @@ namespace Sengoku.API.Controllers
             return Ok(users);
         }
 
-        [HttpGet("GetUserEmail/{userId}")]
+        [HttpGet("GetUser/email/{userId}")]
         public async Task<ActionResult> GetUserEmailAsync(string userId)
         {
             var userEmail = await _userRepository.GetUserEmail(userId);
             return Ok(userEmail);
         }
-        [HttpGet("GetUserById/{userId}", Name = "GetUserId")]
+        [HttpGet("GetUser/id/{userId}", Name = "GetUserId")]
         public async Task<ActionResult> GetUserByIdAsync(string userId)
         {
             var result = await _userRepository.GetUserById(userId);
             return Ok(result);
         }
-        [HttpGet("GetUserByName/{userName}", Name = "GetUserName")]
+        [HttpGet("GetUser/username/{userName}", Name = "GetUserName")]
         public async Task<ActionResult> GetUserByNameAsync(string userName)
         {
             var result = await _userRepository.GetUserByName(userName);
@@ -66,7 +66,7 @@ namespace Sengoku.API.Controllers
             var result = await _userRepository.DeleteUser(email);
             return Ok(result);
         }
-        [HttpPut("UpdateUserEmail/{userId}")]
+        [HttpPut("UpdateUser/email/{userId}")]
         public async Task<ActionResult> UpdateUserEmailAsync([FromBody] User user, string userId)
         {
             var userToUpdate = await _userRepository.GetUserById(userId);
