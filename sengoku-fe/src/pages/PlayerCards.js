@@ -1,21 +1,20 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { loadEvents } from "../actions/eventsAction";
 //Components
-import Events  from "../components/eventComponent";
 import Players from "../components/playerComponent";
 import Pages from "../pages/Pages";
 //Styling
 import styled from 'styled-components';
 import { motion } from "framer-motion";
+import { loadPlayers } from '../actions/playersAction';
 
-const Home = () => {
+const PlayerCards = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-      dispatch(loadEvents());
+      dispatch(loadPlayers());
     }, [dispatch]);
 
-    const {allEvents} = useSelector((state) => state.events);
+    const {allPlayers} = useSelector((state) => state.players);
     return (
             <div>
                 <Pages />
@@ -30,33 +29,31 @@ const Home = () => {
                     </div>
                 </HeaderStyles>
             <div>
-            <EventList>
+            <PlayerList>
                 <h2>Current Events</h2>
-                <EventsStyle>
-                    {allEvents.map((result) => (
-                        <Events
-                        id={result.event_Id}
-                        eventName={result.name}
-                        eventGame={result.game}
-                        eventLocation={result.city}
-                        key={result.event_Id}
+                <PlayerStyles>
+                    {allPlayers.map((result) => (
+                        <Players
+                        id={result.playerId}
+                        playerName={result.name}
+                        key={result.playerId}
                         />
                     ))}
-                </EventsStyle>
-            </EventList>
+                </PlayerStyles>
+            </PlayerList>
             </div>
         </div>
     );
 }
 
-const EventList = styled(motion.div)`
+const PlayerList = styled(motion.div)`
     padding: 0rem 5rem;
     h2{
         padding: 5rem 0rem;
     }
 `;
 
-const EventsStyle = styled(motion.div)`
+const PlayerStyles = styled(motion.div)`
     min-height: 80vh;
     display: grid;
     grid-template-columns: repeat(auto-fit,minmax(500px, 1fr));
@@ -99,4 +96,4 @@ const HeaderStyles = styled.header`
   }
 `;
 
-export default Home;
+export default PlayerCards;
