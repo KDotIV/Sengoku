@@ -39,8 +39,10 @@ const usersApi = `users/`;
 //Players
 const playersApi = `playercards/`;
 
-export const eventsURL = () => `${base_url}${eventsApi}`;
 export const ordersURL = () => `${base_url}${ordersApi}`;
 export const productsURL = () => `${base_url}${productsApi}`;
 export const userURL = () => `${base_url}${usersApi}`;
 export const playerURL = () => `${base_url}${playersApi}`;
+
+//Event Calls
+export const eventsURL = () => `${base_url}${eventsApi}`;

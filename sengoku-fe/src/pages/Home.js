@@ -7,8 +7,13 @@ import Players from "../components/playerComponent";
 //Styling
 import styled from 'styled-components';
 import { motion } from "framer-motion";
+import { useLocation } from 'react-router';
 
 const Home = () => {
+    //get current location
+    const location = useLocation();
+    const pathId = location.pathname.split("/");
+    //FETCH EVENTS
     const dispatch = useDispatch();
     useEffect(() => {
       dispatch(loadEvents());
@@ -16,34 +21,20 @@ const Home = () => {
 
     const {allEvents} = useSelector((state) => state.events);
     return (
-            <div>
-                <HeaderStyles>
-                    <div className="bar">
-                        <Logo>
-                            <p>Sengoku</p>
-                        </Logo>
-                    </div>
-                    <div className="sub-bar">
-                        <h3>Search</h3>
-                    </div>
-                </HeaderStyles>
-            <div>
-            <EventList>
-                <h2>Current Events</h2>
-                <EventsStyle>
-                    {allEvents.map((result) => (
-                        <Events
-                        id={result.event_Id}
-                        eventName={result.name}
-                        eventGame={result.game}
-                        eventLocation={result.city}
-                        key={result.event_Id}
-                        />
-                    ))}
-                </EventsStyle>
-            </EventList>
-            </div>
-        </div>
+    <EventList>
+        <h2>Current Events</h2>
+        <EventsStyle>
+            {allEvents.map((result) => (
+                <Events
+                id={result.event_Id}
+                eventName={result.name}
+                eventGame={result.game}
+                eventLocation={result.city}
+                key={result.event_Id}
+                />
+            ))}
+        </EventsStyle>
+    </EventList>
     );
 }
 
@@ -76,25 +67,6 @@ const Logo = styled.h1`
         text-decoration: none;
         padding: 0.5rem 1rem;
     }
-`;
-
-const HeaderStyles = styled.header`
-  .bar {
-    border-bottom: 10px solid var(--black, black);
-    display: grid;
-    grid-template-columns: auto 1fr;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .sub-bar {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    border-bottom: 1px solid var(--black, black);
-    h3 {
-        margin-left: 1rem;
-    }
-  }
 `;
 
 export default Home;

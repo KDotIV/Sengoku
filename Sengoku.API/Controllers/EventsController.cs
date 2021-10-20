@@ -31,21 +31,21 @@ namespace Sengoku.API.Controllers
             return Ok(events);
         }
 
-        [HttpGet("GetEventByID/{eventId}", Name = "GetEventById")]
+        [HttpGet("GetEvent/id/{eventId}", Name = "GetEventById")]
         public async Task<ActionResult> GetEventById(string eventId)
         {
             var result = await _eventsRepository.GetEventById(eventId);
             if (result == null) return BadRequest(new ErrorResponse("No Event with that ID"));
             return Ok(result);
         }
-        [HttpGet("GetEventByName/{eventName}", Name = "GetEventByName")]
+        [HttpGet("GetEvent/name/{eventName}", Name = "GetEventByName")]
         public async Task<ActionResult> GetEventByName(string eventName)
         {
             var result = await _eventsRepository.GetEventByName(eventName);
             if (result == null) return BadRequest(new ErrorResponse("No Events with that Name"));
             return Ok(new EventsResponse(result));
         }
-        [HttpGet("GetEventsByGame/{gameName}", Name= "GetEventsByGame")]
+        [HttpGet("GetEvents/game/{gameName}", Name= "GetEventsByGame")]
         public async Task<ActionResult> GetEventsbyGame(string gameName, int limit = 20, int page = 0,
             int sort = -1)
         {

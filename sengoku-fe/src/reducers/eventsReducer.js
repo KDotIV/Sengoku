@@ -1,6 +1,7 @@
 const initState = {
     allEvents: [],
     searched: [],
+    getEvent: {},
 }
 
 const eventsReducer = (state = initState,action) => {
@@ -9,6 +10,9 @@ const eventsReducer = (state = initState,action) => {
         case "FETCH_EVENTS":
             return {...state, 
                 allEvents: action.payload.eventResult}
+        case "GET_EVENT":
+            return {...state,
+                getEvent: action.payload.eventResult}
         default:
             return {...state}
     }

@@ -16,33 +16,18 @@ const PlayerCards = () => {
 
     const {allPlayers} = useSelector((state) => state.players);
     return (
-            <div>
-                <Pages />
-                <HeaderStyles>
-                    <div className="bar">
-                        <Logo>
-                            <p>Sengoku</p>
-                        </Logo>
-                    </div>
-                    <div className="sub-bar">
-                        <h3>Search</h3>
-                    </div>
-                </HeaderStyles>
-            <div>
-            <PlayerList>
-                <h2>Current Events</h2>
-                <PlayerStyles>
-                    {allPlayers.map((result) => (
-                        <Players
-                        id={result.playerId}
-                        playerName={result.name}
-                        key={result.playerId}
-                        />
-                    ))}
-                </PlayerStyles>
-            </PlayerList>
-            </div>
-        </div>
+    <PlayerList>
+        <h2>PlayerCards</h2>
+        <PlayerStyles>
+            {allPlayers.map((result) => (
+                <Players
+                id={result.playerId}
+                playerName={result.name}
+                key={result.playerId}
+                />
+            ))}
+        </PlayerStyles>
+    </PlayerList>
     );
 }
 

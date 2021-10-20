@@ -12,3 +12,15 @@ export const loadEvents = () => async (dispatch) =>{
         },
     })
 }
+
+export const getEvent = (eventId) => async (dispatch) =>{
+    //FETCH AXIOS
+    const eventData = await axios.get(`${eventsURL()}GetEvent/id/${eventId}`);
+
+    dispatch({
+        type: "GET_EVENT",
+        payload: {
+            eventResult: eventData.data,
+        },
+    });
+}
