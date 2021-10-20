@@ -9,6 +9,12 @@ const GlobalStyles = createGlobalStyle`
     font-style: normal;
   }
   html {
+    &::-webkit-scrollbar{
+        width: 0.5rem;
+    }
+    &::-webkit-scrollbar-thumb{
+        background-color: darkgray;
+    }
     --red: #ff0000;
     --black: #393939;
     --grey: #3a3a3a;
@@ -22,7 +28,9 @@ const GlobalStyles = createGlobalStyle`
     color: white;
   }
   *, *:before, *:after {
-    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
   body {
     font-family: 'radnika_next', --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,

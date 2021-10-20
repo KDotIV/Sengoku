@@ -4,7 +4,6 @@ import { loadEvents } from "../actions/eventsAction";
 //Components
 import Events  from "../components/eventComponent";
 import Players from "../components/playerComponent";
-import Pages from "../pages/Pages";
 //Styling
 import styled from 'styled-components';
 import { motion } from "framer-motion";
@@ -18,7 +17,6 @@ const Home = () => {
     const {allEvents} = useSelector((state) => state.events);
     return (
             <div>
-                <Pages />
                 <HeaderStyles>
                     <div className="bar">
                         <Logo>

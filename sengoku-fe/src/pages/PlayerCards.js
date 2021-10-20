@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 //Components
 import Players from "../components/playerComponent";
-import Pages from "../pages/Pages";
+import Pages from "../components/Pages";
 //Styling
 import styled from 'styled-components';
 import { motion } from "framer-motion";
