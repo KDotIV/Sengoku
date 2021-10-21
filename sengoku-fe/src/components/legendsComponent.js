@@ -4,22 +4,22 @@ import styled from 'styled-components';
 import { motion } from "framer-motion";
 //Redux
 import { useDispatch } from 'react-redux';
-import { getEvent } from '../actions/eventsAction';
+import { getLegend } from '../actions/legendsAction'
 import { Link } from 'react-router-dom';
 
-const EventComponent = ({ eventName, eventLocation, eventGame, id }) => {
-    //GetEvent
+const LegendComponent = ({ subject, summary, game, plotpoints, id }) => {
+    //GetLegend
     const dispatch = useDispatch();
-    const getEventHandler = () => {
-        dispatch(getEvent(id))
+    const getLegendHandler = () => {
+        dispatch(getLegend(id))
     };
 
     return(
-        <CardStyle onClick={getEventHandler}>
-            <Link to={`/events/${id}`}>
-            <h3>{eventName}</h3>
-            <p>{eventLocation}</p>
-            <p>{eventGame}</p>
+        <CardStyle onClick={getLegendHandler}>
+            <Link to={`/legends/${id}`}>
+            <h3>{subject}</h3>
+            <p>{summary}</p>
+            <p>{game}</p>
             </Link>
         </CardStyle>
     );
@@ -38,4 +38,4 @@ const CardStyle = styled(motion.div)`
     }
 `;
 
-export default EventComponent;
+export default LegendComponent;

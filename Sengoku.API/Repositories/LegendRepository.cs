@@ -27,7 +27,7 @@ namespace Sengoku.API.Repositories
             var camelCaseConvention = new ConventionPack { new CamelCaseElementNameConvention() };
             ConventionRegistry.Register("CamelCase", camelCaseConvention, type => true);
             _ctx = context;
-            _legendsCollection = _ctx.GetCollection<Legend>("Legend");
+            _legendsCollection = _ctx.GetCollection<Legend>("Legends");
             _plotsCollection = _ctx.GetCollection<Plot>("Plot");
         }
 

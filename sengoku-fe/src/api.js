@@ -38,11 +38,12 @@ const productsApi = `products/`;
 const usersApi = `users/`;
 //Players
 const playersApi = `playercards/`;
+//Legends
+const legendsApi = 'legends/';
 
 export const ordersURL = () => `${base_url}${ordersApi}`;
 export const productsURL = () => `${base_url}${productsApi}`;
 export const userURL = () => `${base_url}${usersApi}`;
 export const playerURL = () => `${base_url}${playersApi}`;
-
-//Event Calls
 export const eventsURL = () => `${base_url}${eventsApi}`;
+export const legendsURL = () => `${base_url}${legendsApi}`;

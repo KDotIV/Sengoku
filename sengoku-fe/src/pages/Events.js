@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { motion } from "framer-motion";
 import { useLocation } from 'react-router';
 
-const Home = () => {
+const Events = () => {
     //get current location
     const location = useLocation();
     const pathId = location.pathname.split("/");
@@ -52,4 +52,4 @@ const EventsStyle = styled(motion.div)`
     grid-row-gap: 5rem;
 `;
 
-export default Home;
+export default Events;

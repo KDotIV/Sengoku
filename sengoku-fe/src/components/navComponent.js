@@ -12,13 +12,13 @@ const Nav = () => {
     <>
         <StyleNav>
             <NavMenu>
-                <NavLink to="/playercards" activeStyle>
+                <NavLink to="/playercards">
                     Players
                 </NavLink>
-                <NavLink to="/events" activeStyle>
+                <NavLink to="/events">
                     Events
                 </NavLink>
-                <NavLink to="/legends" activeStyle>
+                <NavLink to="/legends">
                     Legends
                 </NavLink>
                 <NavBtn>
@@ -28,7 +28,7 @@ const Nav = () => {
         </StyleNav>
         <HeaderStyles>
             <Logo>
-                <Link to="/" activeStyle>Sengoku</Link>
+                <Link to="/">Sengoku</Link>
             </Logo>
             <input type="text"/>
             <button>Search</button>
@@ -52,10 +52,6 @@ const NavLink = styled(Link)`
     padding: 0rem 2rem;
     height: 100%;
     cursor: pointer;
-
-    &:active {
-
-    }
 `;
 
 const NavMenu = styled.div`
