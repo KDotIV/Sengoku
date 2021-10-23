@@ -28,7 +28,6 @@ namespace Sengoku.API.Repositories
             ConventionRegistry.Register("CamelCase", camelCaseConvention, type => true);
             _ctx = context;
             _legendsCollection = _ctx.GetCollection<Legend>("Legends");
-            _plotsCollection = _ctx.GetCollection<Plot>("Plot");
         }
 
         public async Task<IReadOnlyList<Legend>> GetAllLegend(int legendsPerPage = DefaultLegendsPerPage, int page = 0,

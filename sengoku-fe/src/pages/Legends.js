@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 //Components
 import LegendComponent  from "../components/legendsComponent";
+import LegendDetail from '../components/legendDetailComponent';
 //Styling
 import styled from 'styled-components';
 import { motion } from "framer-motion";
@@ -11,7 +12,8 @@ import { loadLegends } from '../actions/legendsAction';
 const Legends = () => {
     //get current location
     const location = useLocation();
-    const pathId = location.pathname.split("/");
+    const pathId = location.pathname.split("/")[2];
+    console.log(pathId);
     //FETCH LEGENDS
     const dispatch = useDispatch();
     useEffect(() => {
@@ -21,6 +23,7 @@ const Legends = () => {
     const {allLegends} = useSelector((state) => state.legends);
     return (
     <LegendList>
+        {pathId && <LegendDetail />}
         <h2>New Legends</h2>
         <LegendsStyle>
             {allLegends.map((result) => (

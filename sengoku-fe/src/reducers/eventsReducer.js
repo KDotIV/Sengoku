@@ -2,6 +2,7 @@ const initState = {
     allEvents: [],
     searched: [],
     getEvent: {},
+    isLoading: true,
 }
 
 const eventsReducer = (state = initState,action) => {

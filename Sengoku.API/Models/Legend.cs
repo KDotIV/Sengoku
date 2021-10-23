@@ -16,7 +16,7 @@ namespace Sengoku.API.Models
         [BsonElement("legendId")] public string legendId { get; set; }
         [BsonElement("subject")] public string subject { get; set; }
         [BsonElement("summary")] public string summary { get; set; }
-        [BsonElement("plotpoints")] public Plot[] plotPoints { get; set; }
+        [BsonElement("plotPoints")] public Plot[] plotPoints { get; set; }
         [BsonElement("game")] public string game { get; set; }
     }
 }

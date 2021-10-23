@@ -1,6 +1,7 @@
 const initState = {
     allPlayers: [],
     searched: [],
+    isLoading: true,
 }
 
 const playersReducer = (state = initState,action) => {

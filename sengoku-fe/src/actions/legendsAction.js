@@ -3,7 +3,11 @@ import { legendsURL } from "../api";
 
 //Action Center
 export const loadLegends = () => async (dispatch) =>{
-    const legendsData = await axios.get(legendsURL() + 'GetAllLegends')
+    dispatch({
+        type: "LOADING_LEGENDS",
+    });
+
+    const legendsData = await axios.get(legendsURL() + 'GetAllLegends')    
     dispatch({
         type: "FETCH_LEGENDS",
         payload: {

@@ -82,7 +82,6 @@ const Logo = styled.h2`
     height: auto;
     font-size: 2rem;
     position: relative;
-    z-index: 2;
     background: LightCoral;
     overflow: hidden;
     p {
@@ -93,7 +92,7 @@ const Logo = styled.h2`
     }
 `;
 
-const HeaderStyles = styled.header`
+const HeaderStyles = styled(motion.div)`
     padding: 1rem 0.1rem;
     text-align: center;
     input{

@@ -7,10 +7,11 @@ import { useDispatch } from 'react-redux';
 import { getLegend } from '../actions/legendsAction'
 import { Link } from 'react-router-dom';
 
-const LegendComponent = ({ subject, summary, game, plotpoints, id }) => {
+const LegendComponent = ({ subject, summary, game, id }) => {
     //GetLegend
     const dispatch = useDispatch();
     const getLegendHandler = () => {
+        document.body.style.overflow = "hidden";
         dispatch(getLegend(id))
     };
 
@@ -31,6 +32,7 @@ const CardStyle = styled(motion.div)`
     text-align: center;
     border-radius: 1rem;
     cursor: pointer;
+    overflow: hidden;
     img{
         width: 100%;
         height: 40vh;
