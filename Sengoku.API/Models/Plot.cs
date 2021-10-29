@@ -14,6 +14,7 @@ namespace Sengoku.API.Models
         [JsonProperty("_id")]
         [BsonId] public ObjectId Id { get; set; }
         [BsonElement("plotId")] public string plotId { get; set; }
+        [BsonElement("title")] public string title { get; set; }
         [BsonElement("text")] public string text { get; set; }
         [BsonElement("image")] public string image { get; set; }
         [BsonElement("clipRef")] public string clipRef { get; set; }

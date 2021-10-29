@@ -22,21 +22,23 @@ const Legends = () => {
 
     const {allLegends} = useSelector((state) => state.legends);
     return (
-    <LegendList>
+    <>
+        <LegendList>
         {pathId && <LegendDetail />}
-        <h2>New Legends</h2>
-        <LegendsStyle>
-            {allLegends.map((result) => (
-                <LegendComponent
-                id={result.legendId}
-                subject={result.subject}
-                summary={result.summary}
-                game={result.game}
-                key={result.legendId}
-                />
-            ))}
-        </LegendsStyle>
-    </LegendList>
+            <h2>New Legends</h2>
+            <LegendsStyle>
+                {allLegends.map((result) => (
+                    <LegendComponent
+                    id={result.legendId}
+                    subject={result.subject}
+                    summary={result.summary}
+                    game={result.game}
+                    key={result.legendId}
+                    />
+                ))}
+            </LegendsStyle>
+        </LegendList>
+    </>
     );
 }
 

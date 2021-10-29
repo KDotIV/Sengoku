@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from 'react-router';
 //Styling and Animation
 import styled from 'styled-components';
 import { motion } from "framer-motion";
-//Redux
-import { useSelector } from 'react-redux';
+import test from '../media/ZyoDzL3.jpg';
+//Redux & Components
 import { useHistory } from 'react-router-dom';
+import { getLegend } from '../actions/legendsAction';
+import YoutubeEmbed from './youtubeComponent';
 
 const LegendDetail = () => {
     const history = useHistory();
+    const location = useLocation();
+    const pathId = location.pathname.split("/")[2];
+    const dispatch = useDispatch();
+
+    //GetLegend on Refresh
+    const isInitialState = useRef(true);
+    const reFetchLegend = useCallback (() => {
+        dispatch(getLegend(pathId))
+    }, [dispatch])
+
+    useEffect(() => reFetchLegend(), [dispatch])
     //Exit Details
     const exitDetailHandler = (e) => {
         const element = e.target;
@@ -30,7 +45,11 @@ const LegendDetail = () => {
                     <PlotPoints>
                         <h3>PlotPoints</h3>
                         {legend.plotPoints.map((data) =>(
+                            <>
                             <p key={data.plotId}>{data.text}</p>
+                            {data.image && <img key={data.plotId} src="../media/ZyoDzL3.jpg" alt="images" />}
+                            {data.clipRef && <YoutubeEmbed embedId={data.clipRef} />}
+                            </>
                         ))}
                         </PlotPoints>
                 </Detail>
@@ -60,19 +79,28 @@ const Detail = styled(motion.div)`
     left: 10%;
     color: white;
     img{
-        width: 100%;
+        justify-content: center;
+        width: 80%;
     }
 `;
 
 const Summary = styled(motion.div)`
-    display: flex;
+    display: grid;
+    grid-auto-flow: row;
     align-items: center;
-    justify-content: space-between;
+    text-align: center;
+    padding: 5rem 10rem;
 `;
 
 const PlotPoints = styled(motion.div)`
-    display: flex;
-    justify-content: space-evenly;
-
+    display: grid;
+    grid-auto-flow: row;
+    align-items: center;
+    text-align: center;
+    
+    p{
+        padding: 3rem;
+    }
 `;
+
 export default LegendDetail;

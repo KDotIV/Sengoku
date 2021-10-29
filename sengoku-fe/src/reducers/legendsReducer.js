@@ -1,6 +1,6 @@
 const initState = {
-    allLegends: [],
-    searched: [],
+    allLegends: [{}],
+    searched: [{}],
     legend: {plotPoints: []},
     isLoading: true,
 }
