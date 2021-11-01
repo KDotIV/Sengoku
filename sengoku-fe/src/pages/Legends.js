@@ -17,8 +17,8 @@ const Legends = () => {
     //FETCH LEGENDS
     const dispatch = useDispatch();
     useEffect(() => {
-      dispatch(loadLegends());
-    }, [dispatch]);
+        dispatch(loadLegends());
+      }, []);
 
     const {allLegends} = useSelector((state) => state.legends);
     return (

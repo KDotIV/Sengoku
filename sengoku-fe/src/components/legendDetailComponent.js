@@ -1,13 +1,13 @@
-import React, { useEffect, useCallback, useRef } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from 'react-router';
 //Styling and Animation
 import styled from 'styled-components';
 import { motion } from "framer-motion";
-import test from '../media/ZyoDzL3.jpg';
 //Redux & Components
 import { useHistory } from 'react-router-dom';
 import { getLegend } from '../actions/legendsAction';
+import { saveState, loadState } from '../store';
 import YoutubeEmbed from './youtubeComponent';
 
 const LegendDetail = () => {
@@ -15,14 +15,16 @@ const LegendDetail = () => {
     const location = useLocation();
     const pathId = location.pathname.split("/")[2];
     const dispatch = useDispatch();
+    const {legend, isLoading} = useSelector((state) => state.legends)
 
     //GetLegend on Refresh
-    const isInitialState = useRef(true);
-    const reFetchLegend = useCallback (() => {
+    const reFetchLegend = useCallback(() => {
         dispatch(getLegend(pathId))
     }, [dispatch])
+    
+    useEffect(() => reFetchLegend(), []);
 
-    useEffect(() => reFetchLegend(), [dispatch])
+    saveState(legend);
     //Exit Details
     const exitDetailHandler = (e) => {
         const element = e.target;
@@ -31,14 +33,14 @@ const LegendDetail = () => {
             history.push("/legends/");
         }
     }
-    const {legend, isLoading} = useSelector((state) => state.legends)
     return (
         <>
         {!isLoading && (
             <CardShadow className="shadow" onClick={exitDetailHandler}>
                 <Detail>
+                    <h2>{legend.subject}</h2>
                     <Summary>
-                        <h2>{legend.subject}</h2>
+                        {legend.mainClip && <YoutubeEmbed embedId={legend.mainClip}/>}
                         <h3>{legend.summary}</h3>
                         <h3>{legend.game}</h3>
                     </Summary>
@@ -47,7 +49,7 @@ const LegendDetail = () => {
                         {legend.plotPoints.map((data) =>(
                             <>
                             <p key={data.plotId}>{data.text}</p>
-                            {data.image && <img key={data.plotId} src="../media/ZyoDzL3.jpg" alt="images" />}
+                            {data.image && <img src={data.image} alt="images" />}
                             {data.clipRef && <YoutubeEmbed embedId={data.clipRef} />}
                             </>
                         ))}
@@ -72,7 +74,7 @@ const CardShadow = styled(motion.div)`
 const Detail = styled(motion.div)`
     width: 80%;
     border-radius: 1rem;
-    padding: 2rem 20rem;
+    padding: 2rem;
     margin-top: 12rem;
     background: #1b213a;
     position: absolute;
@@ -82,22 +84,25 @@ const Detail = styled(motion.div)`
         justify-content: center;
         width: 80%;
     }
+    h2{
+        text-align: center;
+    }
 `;
-
 const Summary = styled(motion.div)`
     display: grid;
-    grid-auto-flow: row;
-    align-items: center;
-    text-align: center;
-    padding: 5rem 10rem;
-`;
+    grid-template-columns: repeat(1, 1fr) 1fr;
+    grid-column-gap: 3rem;
+    grid-row-gap: 5rem;
+    padding-bottom: 5rem;
+    h3{
 
+    }
+`;
 const PlotPoints = styled(motion.div)`
     display: grid;
     grid-auto-flow: row;
     align-items: center;
     text-align: center;
-    
     p{
         padding: 3rem;
     }

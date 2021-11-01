@@ -16,13 +16,22 @@ export const loadLegends = () => async (dispatch) =>{
     })
 }
 
-export const getLegend = (legendId) => async (dispatch) =>{
+export const getLegend = (legendId) => async (dispatch, getState) => {
+
+    const { dataPresent } = getState().legends;
+
     const legendData = await axios.get(`${legendsURL()}GetLegend/id/${legendId}`);
 
-    dispatch({
-        type: "GET_LEGEND",
-        payload: {
-            legendResult: legendData.data,
-        },
-    });
+    if(dataPresent) {
+        return null;
+    } else {
+        return (
+            dispatch({
+                type: "GET_LEGEND",
+                payload: {
+                    legendResult: legendData.data,
+                },
+            })
+        );
+    }
 }

@@ -18,5 +18,6 @@ namespace Sengoku.API.Models
         [BsonElement("summary")] public string summary { get; set; }
         [BsonElement("plotPoints")] public Plot[] plotPoints { get; set; }
         [BsonElement("game")] public string game { get; set; }
+        [BsonElement("mainClip")] public string mainClip { get; set; }
     }
 }
