@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 import { getLegend } from '../actions/legendsAction';
 import { saveState, loadState } from '../store';
 import YoutubeEmbed from './youtubeComponent';
+import PlotComponenet from './plotPointsComponent';
 
 const LegendDetail = () => {
     const history = useHistory();
@@ -44,16 +45,18 @@ const LegendDetail = () => {
                         <h3>{legend.summary}</h3>
                         <h3>{legend.game}</h3>
                     </Summary>
+                    <h2>PlotPoints</h2>
                     <PlotPoints>
-                        <h3>PlotPoints</h3>
-                        {legend.plotPoints.map((data) =>(
-                            <>
-                            <p key={data.plotId}>{data.text}</p>
-                            {data.image && <img src={data.image} alt="images" />}
-                            {data.clipRef && <YoutubeEmbed embedId={data.clipRef} />}
-                            </>
+                    {legend.plotPoints.map((result) => (
+                        <PlotComponenet
+                        id={result.legendId}
+                        title={result.title}
+                        text={result.text}
+                        image={result.image}
+                        key={result.legendId}
+                        />
                         ))}
-                        </PlotPoints>
+                    </PlotPoints>
                 </Detail>
             </CardShadow>
         )}
@@ -86,26 +89,27 @@ const Detail = styled(motion.div)`
     }
     h2{
         text-align: center;
+        padding-bottom: 2rem;
+    }
+    h3{
+        text-align: center;
     }
 `;
 const Summary = styled(motion.div)`
     display: grid;
-    grid-template-columns: repeat(1, 1fr) 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-column-gap: 3rem;
     grid-row-gap: 5rem;
     padding-bottom: 5rem;
-    h3{
-
-    }
 `;
 const PlotPoints = styled(motion.div)`
-    display: grid;
-    grid-auto-flow: row;
-    align-items: center;
-    text-align: center;
-    p{
-        padding: 3rem;
-    }
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    place-content: flex-start center;
 `;
 
 export default LegendDetail;

@@ -23,8 +23,8 @@ const Legends = () => {
     const {allLegends} = useSelector((state) => state.legends);
     return (
     <>
-        <LegendList>
         {pathId && <LegendDetail />}
+        <LegendList>
             <h2>New Legends</h2>
             <LegendsStyle>
                 {allLegends.map((result) => (
